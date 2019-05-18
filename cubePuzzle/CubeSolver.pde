@@ -1,0 +1,9 @@
+class CubeSolver{
+  
+  CubeSolver(){
+    
+    
+    
+  }
+  
+}
