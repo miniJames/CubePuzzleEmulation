@@ -14,7 +14,7 @@ class Cubie {
   float offsetY=0;
   float offsetZ =0;
   int target;
-  
+
   Cubie() {
   }
 
@@ -61,38 +61,85 @@ class Cubie {
     return false;
   }
 
+  //boolean isEdge() {
+  //  switch (ID) {
+  //  case 34 : 
+  //    return true;
+  //  case 48 : 
+  //    return true;
+  //  case 36 : 
+  //    return true;
+  //  case 33 : 
+  //    return true;
+  //  case 18 : 
+  //    return true;
+  //  case 6 : 
+  //    return true;
+  //  case 17 :
+  //    return true;
+  //  case 5 : 
+  //    return true;
+  //  case 10 : 
+  //    return true;
+  //  case 24 : 
+  //    return true;
+  //  case 12 :
+  //    return true;    
+  //  case 9 :
+  //    return true;
+  //  }
+  //  return false;
+  //}
   boolean isEdge() {
     switch (ID) {
-    case 34 : 
+    case 290 : 
       return true;
-    case 48 : 
+    case 176 : 
       return true;
-    case 36 : 
+    case 164 : 
       return true;
-    case 33 : 
+    case 289 : 
       return true;
-    case 18 : 
+    case 82 : 
       return true;
-    case 6 : 
+    case 70 : 
       return true;
-    case 17 :
+    case 81 :
       return true;
-    case 5 : 
+    case 69 : 
       return true;
-    case 10 : 
+    case 266 : 
       return true;
-    case 24 : 
+    case 152 : 
       return true;
-    case 12 :
+    case 140 :
       return true;    
-    case 9 :
+    case 265 :
       return true;
     }
     //println("not an edge");
     return false;
   }
+
+  boolean isCenter() {
+    switch (ID) {
+    case 208 : 
+      return true;
+    case 416 : 
+      return true;    
+    case 196 : 
+      return true;    
+    case 392 : 
+      return true;    
+    case 321 : 
+      return true;    
+    case 322 : 
+      return true;
+    }
+    return false;
+  }
   void show() {
-    //println(rotating);
+
     stroke(0)  ;
     strokeWeight(8);      
     //back
@@ -106,7 +153,12 @@ class Cubie {
     //  //angle+=.01;
     //}
     translate(x, y, z);
-
+    //if (ID==target) {
+    //tag="O";
+    //} else {
+    //tag = "";
+    //}
+    textSize(3);
     fill(cols[front]);
     square(0, 0, s);
     fill(0);
