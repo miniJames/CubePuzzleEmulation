@@ -14,11 +14,11 @@ class Cubie {
   float offsetY=0;
   float offsetZ =0;
   int target;
-
+  String belongsTo;
   Cubie() {
   }
 
-  Cubie(int _x, int _y, int _z, float w) {
+  Cubie(int _x, int _y, int _z, float w, String bt) {
     x=_x;
     y=_y;
     s=w;
@@ -37,25 +37,32 @@ class Cubie {
     cols[up] = yl;
     cols[down]=wh;
     rotating = false;
+    belongsTo=bt;
+    tag="";
   }
 
+
+
+
+
   boolean isCorner() {
-    switch (ID) {
-    case 50 : 
+
+    switch (belongsTo.replaceAll("[0-9]", "")) {
+    case "FUL" : 
       return true;
-    case 38 : 
+    case "FUR" : 
       return true;
-    case 49 : 
+    case "FDL" : 
       return true;
-    case 37 : 
+    case "FDR" : 
       return true;
-    case 26 : 
+    case "BUR" : //
       return true;
-    case 14 : 
+    case "BUL" : 
       return true;
-    case 25 : 
+    case "BDR" : //
       return true;
-    case 13 :
+    case "BDL" :
       return true;
     }
     return false;
@@ -91,30 +98,31 @@ class Cubie {
   //  return false;
   //}
   boolean isEdge() {
-    switch (ID) {
-    case 290 : 
+
+    switch (belongsTo.replaceAll("[0-9]", "")) {
+    case "BUM" : 
       return true;
-    case 176 : 
+    case "BEL" : 
       return true;
-    case 164 : 
+    case "BER" : 
       return true;
-    case 289 : 
+    case "BDM" : 
       return true;
-    case 82 : 
+    case "SUL" : 
       return true;
-    case 70 : 
+    case "SUR" : 
       return true;
-    case 81 :
+    case "SDL" :
       return true;
-    case 69 : 
+    case "SDR" : 
       return true;
-    case 266 : 
+    case "FUM" : 
       return true;
-    case 152 : 
+    case "FEL" : 
       return true;
-    case 140 :
+    case "FER" :
       return true;    
-    case 265 :
+    case "FDM" :
       return true;
     }
     //println("not an edge");
@@ -122,36 +130,37 @@ class Cubie {
   }
 
   boolean isCenter() {
-    switch (ID) {
-    case 208 : 
+    switch (belongsTo) {
+    case "BEM" : 
       return true;
-    case 416 : 
+    case "SDM" : 
       return true;    
-    case 196 : 
+    case "FEM": 
       return true;    
-    case 392 : 
+    case "SUM" : 
       return true;    
-    case 321 : 
+    case "SEL" : 
       return true;    
-    case 322 : 
+    case "SER" : 
       return true;
     }
     return false;
   }
+
   void show() {
 
     stroke(0)  ;
-    strokeWeight(8);      
+    strokeWeight(1);      
     //back
     //blue
     pushMatrix(); 
-    //if (rotating) {
-    //  //println("========================");
-    //  rotateX(offsetX);
-    //  rotateY(offsetY);
-    //  rotateZ(offsetZ);
-    //  //angle+=.01;
-    //}
+    if (rotating) {
+      println("========================");
+      rotateX(offsetX);
+      rotateY(offsetY);
+      rotateZ(offsetZ);
+      angle+=.01;
+    }
     translate(x, y, z);
     //if (ID==target) {
     //tag="O";
@@ -195,20 +204,18 @@ class Cubie {
     popMatrix();
   }
   void rotateXCubie(boolean dir) {
-    //println("ROTATEX " + dir);
-    //rotate up, front, down, back
-    //offsetX+=HALF_PI;
+    //LMR
+    println("ROTATEX " + offsetX);
     if (!dir) {
-      offsetX+=angle;
+      offsetX-=angle;
       color temp = cols[back];
       cols[back]=cols[up];
       cols[up]=cols[front];
       cols[front]=cols[down];
       cols[down] =temp;
     } else {
-
-      offsetX-=angle;
-
+      offsetX+=angle;
+    
       color temp = cols[back];
       cols[back]=cols[down];
       cols[down]=cols[front];
@@ -216,49 +223,50 @@ class Cubie {
       cols[up] =temp;
     }
     if (hitAngle(offsetX)) {
-      rotating = false;
-      //println("STOPROTATING");
+      //rotating = false;
+      println("TEST");
     }
   }  
   void rotateYCubie(boolean dir) {
-    //println("ROTATEY " + dir);
-
-    //rotate left, front, right, back
-    //top or bottom
-    if (!dir) {
-      offsetY+=angle;
+    println("ROTATEY " + dir);
+    //UDE
+    if (!dir) {      
       color temp = cols[left];
+      offsetY-=angle;
+
+      offsetY+=angle;
       cols[left]=cols[front];
       cols[front]=cols[right];
       cols[right]=cols[back];
       cols[back] =temp;
+
       //println("notME");
     } else {     // println("HERE "+ dir);
       color temp = cols[left];
       //counter-clockwise.
       //clockwise.
-      offsetY-=angle;
       cols[left]=cols[back];
       cols[back]=cols[right];
       cols[right]=cols[front];
       cols[front] =temp;
     }
     if (hitAngle(offsetX)) {
-      rotating = false;
+      //rotating = false;
     }
   }  
   void rotateZCubie(boolean dir) {
-    //println("ROTATEZ " + dir);
+    //FSB
+    println("ROTATEZ " + dir);
     //rotate up, right, down, left
-    if (!dir) {
+    if (!dir) {      
       offsetZ+=angle;
       color temp = cols[up];
       cols[up]= cols[right];
       cols[right]=cols[down];
       cols[down]=cols[left];
       cols[left] =temp;
-    } else {
       offsetZ-=angle;
+    } else {      
       color temp = cols[up];
       cols[up]= cols[left];
       cols[left]=cols[down];
@@ -266,22 +274,24 @@ class Cubie {
       cols[right] =temp;
     }
     if (hitAngle(offsetZ)) {
-      rotating = false;
+      //rotating = false;
     }
   }
   boolean hitAngle(float ang) {
     boolean rtrn = false;
     ang = abs(ang % TWO_PI);
-    ang = round(10*ang)/10;
+    ang = (int)(ang);
     //println(ang);
-    if (ang ==round(10*HALF_PI)/10  ||
-      ang ==round(10*PI)/10  ||
-      ang ==round(10*(PI+HALF_PI))/10 ||
-      ang ==round(10*(PI+HALF_PI))/10 
-      ) {
-      rtrn = true;
+    //if (ang ==round(10*HALF_PI)/10  ||
+    //  ang ==round(10*PI)/10  ||
+    //  ang ==round(10*(PI+HALF_PI))/10 ||
+    //  ang ==round(10*(PI+HALF_PI))/10 
+    //  ) {
+    //  rtrn = true;
+    //}
+    if((int)ang==0){
+      return true;  
     }
-
 
     return rtrn;
   }

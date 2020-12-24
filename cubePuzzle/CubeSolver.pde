@@ -1,10 +1,18 @@
 class CubeSolver {
-
-  CubeSolver() {
+  Cube c;
+  CubeSolver(Cube cub) {
     
   }
+  
+  void hillClimb(){
+      
+  }
+  
+  
+  
   void whiteCross() {
     //find white edge pieces.
+    
     
   }
   void insertCorners() {
@@ -19,5 +27,6 @@ class CubeSolver {
   void rotateCorners() {
   }
   void orientCorners() {
+    
   }
 }

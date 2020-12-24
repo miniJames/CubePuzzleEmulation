@@ -33,7 +33,6 @@ class AlgorithmManager {
       case "r2" : 
         rtrn = rtrn + "RR";
         break;
-
       case "L" :
         rtrn +="l";
         break;

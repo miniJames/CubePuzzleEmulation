@@ -7,7 +7,7 @@ int back =5;// 0x1;
 int equator = 7;
 int standing = 6;
 int middle = 8;
-
+//
 class Cube {
   AlgorithmManager alg;
   boolean rotating = false;
@@ -25,59 +25,99 @@ class Cube {
     for (int k=0; k<l; k++) {
       for (int j=0; j<wd; j++) {
         for (int i=0; i<h; i++) {
-          if ((k==0 || k==l-1) || ((k>0 && k<l) && (j==0)||(i==0)|| (k==0)) || ((k>0 && k<l-1) && (j==wd-1)||(i==h-1)|| (k==l-1)) ) {  
-            int si =(int)((i*w)-(.5*w)*l);
-            int sj =(int)((j*w)-(.5*w)*l);
-            int sk =(int)((k*w) -(.5*w)*l);
-            //println("START I:" + si + " START J:" + sj + " START K:" + sk + " w:"+w);
-            Cubie c=new Cubie(si, sj, sk, w);
-            c.locationID = cn;
-            //c.locationID = (cn);
-            c.ID = faceID(cn);
-            c.target = c.ID;
+          //if ((k==0 || k==l-1) || ((k>0 && k<l) && (j==0)||(i==0)|| (k==0)) || ((k>0 && k<l-1) && (j==wd-1)||(i==h-1)|| (k==l-1)) ) {  
+          int si =(int)((i*w)-(.5*w)*l);
+          int sj =(int)((j*w)-(.5*w)*l);
+          int sk =(int)((k*w) -(.5*w)*l);
+          //println("START I:" + si + " START J:" + sj + " START K:" + sk + " w:"+w);
+          String bt = "";
 
-            //c.tag = ""+c.ID;
-            cub.add(c);
-            cn++;
+
+          if (k==0) {
+            bt = bt +"B";
+          } else if (k==l-1) {
+            bt+="F";
+          } else {
+            bt+="S";
+            //if (k>1 || (k==l-1)) {
+            bt+=k;
+            //}
           }
+
+          if (j==0) {
+            bt+="U";
+          } else if (j==wd-1) {
+            bt+="D";
+          } else {
+            bt+="E";
+            //if (j>1 || (j==wd-1)) {
+            bt+=j;
+            //}
+          }
+
+
+          if (i==0) {
+            bt+="L";
+          } else   if (i==h-1) {
+            bt+="R";
+          } else {
+            bt+="M";       
+            //if (i>1 || (i==wd-1)) {
+            bt+=i;
+            //}
+          }
+          //println(bt);
+          Cubie c=new Cubie(si, sj, sk, w, bt);
+          c.locationID = cn;
+          //c.locationID = (cn);
+          c.ID = cn;
+          c.target = c.ID;
+          c.tag = bt+ " " + c.locationID;
+          //c.tag = ""+c.ID;
+          cub.add(c);
+          cn++;
+          //} else {
+          //  cub.add(new Cubie(0,0,0,0," ");  
+          //}
         }
       }
     }
   }
 
-  boolean rotateCube(char k) {
+  boolean rotateCube(String command) {
     //boolean rtrn = true;
-    if (k=='X') {
+    rotating=true;
+    if (command=="X") {
 
       sendMoves("U'");
       sendMoves("D");
       sendMoves("E'");
       return true;
-    } else if ( k=='x') {
+    } else if ( command=="x") {
 
       sendMoves("U''");
       sendMoves("D'");
       sendMoves("E''");
       return true;
-    } else   if (k=='Y') {
+    } else   if (command=="Y") {
 
       sendMoves("L'");
       sendMoves("R");
       sendMoves("M'");
       return true;
-    } else if ( k=='y') {
+    } else if (command=="y") {
 
       sendMoves("L''");
       sendMoves("R'");
       sendMoves("M''");
       return true;
-    } else if (k=='Z') {
+    } else if (command=="Z") {
 
       sendMoves("F'");
       sendMoves("B");
       sendMoves("S'");
       return true;
-    } else if ( k=='z') {
+    } else if (command=="z") {
 
       sendMoves("F''");
       sendMoves("B'");
@@ -88,27 +128,76 @@ class Cube {
   }
 
   void changeMode(char k) {
-    swapCubies(k);
-    for (Cubie cubie : c.getFace(k)) {
 
-      c.rotateCubie(k, cubie);
+    String command = "";
+    if (k=='q') {
+      command="l";
+    } else if (k=='Q') {
+      command="L";
+    } else if (k=='w') {
+      command="M1";
+    } else if (k=='W') {
+      command="m1";
+    } else if (k=='e') {
+      command = "M2";
+    } else if (k=='E') {
+      command = "m2";
+    } else if (k=='r') {
+      command = "r";
+    } else if (k=='R') {
+      command = "R";
+    } else if (k=='a') {
+      command = "f";
+    } else if (k=='A') {
+      command = "F";
+    } else if (k=='s') {
+      command="s2";
+    } else if (k=='S') {
+      command="S2";
+    } else if (k=='d') {
+      command="s1";
+    } else if (k=='D') {
+      command="S1";
+    } else if (k=='f') {
+      command="b";
+    } else if (k=='F') {
+      command="B";
+    } else if (k=='z') {
+      command="u";
+    } else if (k=='Z') {
+      command="U";
+    } else if (k=='x') {
+      command = "E1";
+    } else if (k=='X') {
+      command = "e1";
+    } else if (k=='c') {
+      command= "e2";
+    } else if (k=='C') {
+      command= "E2";
+    } else if (k=='v') {
+      command="d";
+    } else if (k=='V') {
+      command="D";
+    }
+    swapCubies(command);
+    for (Cubie cubie : getFace(""+command)) {
+
+      rotateCubie(command, cubie);
     }
     //println("JAMES " +k);
-    String s =  k + "";
-    rotateCube(k);
+    //String s =  k + "";
+    rotateCube(command);
 
 
 
     if (k=='q') {
-      c.scrambleMode = !c.scrambleMode;
+      //scrambleMode = !scrambleMode;
     }
     if (k=='a') {
       //run algorithm.
       //sendMoves("RRLLUUDDFFBB");
       sendMoves("lrbfufbrblufFULBRBFUFBRL");
     } else if (k=='1') {
-      //println(alg.algorithms.get("sune"));
-      //println(alg.decode(alg.algorithms.get("sune")));
       sendMoves(alg.decode(alg.algorithms.get("sune")));
     } else if (k=='2') {
 
@@ -133,27 +222,26 @@ class Cube {
     }
   }
   void show() {
+    int counter =0;
+    for (int k=0; k<l; k++) {
+      for (int j=0; j<wd; j++) {
+        for (int i=0; i<h; i++) {
 
-    for (Cubie cu : cub) {
-      //cub.get(i).show();
-      cu.show();
+          if ((k==0 || k==l-1) || ((k>0 && k<l) && (j==0)||(i==0)|| (k==0)) || ((k>0 && k<l-1) && (j==wd-1)||(i==h-1)|| (k==l-1)) ) {
+            cub.get(counter).show();
+          }
+          counter++;
+        }
+      }
     }
-    if (c.scrambleMode  ) {
+    //for (Cubie cu : cub) {
+    //  //cub.get(i).show();
+
+    //  cu.show();
+    //}
+    if (scrambleMode  ) {
       //for (int cc = 0; cc < 5000; cc++) {
       scramble(1);
-      //  int face =floor( random(0, 12));
-      //  String faces[] =new String [] {"U", "U'", "D", "D'", "L", "L'", "R", "R'", "F", "F'", "B", "B'"};
-      //  char fc = alg.decode(faces[face]).toCharArray()[0];
-      //  Cubie faceID[] = getFace(fc);
-      //  for (Cubie f : faceID) {
-      //    c.rotateCubie(fc, f);
-      //    swapCubies(fc);
-      //  }
-      //  if (isSolved()) {
-      //    c.scrambleMode=false;
-      //  }
-      //}
-      //}
     }
   }
   void scramble(int moves) {
@@ -165,13 +253,13 @@ class Cube {
       //(faces[face]);
       char fc = (faces[face]);
       //("FC "+fc);
-      if (!  rotateCube(fc)) {
+      if (!  rotateCube(""+fc)) {
         //println("DOODAR");
-        Cubie faceID[] = getFace(fc);
-        swapCubies(fc);
+        Cubie faceID[] = getFace(""+fc);
+        swapCubies(""+fc);
 
         for (Cubie f : faceID) {
-          c.rotateCubie(fc, f);
+          rotateCubie(""+fc, f);
         }
       }
       if (isSolved()) {
@@ -182,65 +270,36 @@ class Cube {
   void sendMoves(String moves) {
 
     for (char c : moves.toCharArray()) {
-      swapCubies(c);
-      for (Cubie cubie : getFace(c)) {
+      swapCubies(""+c);
+      for (Cubie cubie : getFace(""+c)) {
 
-        rotateCubie(c, cubie);
+        rotateCubie(""+c, cubie);
       }
-      rotateCube(c);
+      rotateCube(""+c);
     }
   }
-  Cubie[] getFace(char face) {
-    int fce = 0;
-    if (face=='u' || face=='U') {
-      fce=up;
-    } else  if (face=='d' || face=='D') {
-      fce=down;
-    } else  if (face=='l'|| face=='L') {
-      fce=left;
-    } else  if (face=='r'|| face=='R') {
-      fce=right;
-    } else  if (face=='f'|| face=='F') {
-      fce=front;
-    } else  if (face=='b'|| face=='B') {
-      fce=back;
-    } else if (face=='e' || face =='E') {
-      fce=equator;
-    } else if (face=='s' || face =='S') {
-      fce=standing;
-    } else if (face=='m' || face =='M') {
-      fce=middle;
-    }
-    //println(face);
+  Cubie[] getFace(String face) {
     ArrayList<Cubie> rtrn = new ArrayList<Cubie>();
+    String fc = "" + face;
+    fc= fc.toUpperCase();
     int counter =0, index=0;
     for (index=0; index<cub.size(); index++) {
       Cubie c = cub.get(index);
-      if (fce==up) {
-      }
-      if (isBitON(faceID(c.locationID), fce)) {
-        if (fce==up) {
-        }
+      if (c.belongsTo.contains(fc)) {
         rtrn.add(c);
-
-        counter++;
-      } else {
-        if (fce==up) {
-        }
       }
-    }
-
+    } 
     Cubie[] rtrn1 = new Cubie[rtrn.size()];
     counter =0;
     for (Cubie cccc : rtrn) {
+      //println("YES"+cccc.locationID);
       rtrn1[counter]=cccc;
-      counter ++;
-    }
-
-
+      counter++;
+    } 
     bubbleSort(rtrn1);
     return rtrn1;
   }
+
   void bubbleSort(Cubie arr[])
   {
 
@@ -257,39 +316,39 @@ class Cube {
   }
 
   boolean isSolved() {
-    boolean rtrn = true;
-    char faces[] =new char [] {'u', 'd', 'e'};
-    for (int count=0; count<faces.length; count++) {
-      //char faces[] =new char [] {'u', 'd', 'l', 'r', 'f', 'b'};
-      Cubie[] cubiesIndex = getFace(faces[count]);
-      //printArray( getFace(faces[count]));
-      Cubie comp;
+    boolean rtrn = false;
+    //char faces[] =new char [] {'U', 'D', 'E'};
+    //for (int count=0; count<faces.length; count++) {
+    //  //char faces[] =new char [] {'u', 'd', 'l', 'r', 'f', 'b'};
+    //  Cubie[] cubiesIndex = getFace(""+faces[count]);
+    //  //printArray( getFace(faces[count]));
+    //  Cubie comp;
 
-      comp = (cubiesIndex[0]);
-      for (int c =1; c<cubiesIndex.length; c++) {
-        if (c>0) {
-          //println(c);
-          Cubie col2;
-          //println(cub.size());
-          //println("L"+cubiesIndex[c]);//);
+    //  comp = (cubiesIndex[0]);
+    //  for (int c =1; c<cubiesIndex.length; c++) {
+    //    if (c>0) {
+    //      //println(c);
+    //      Cubie col2;
+    //      //println(cub.size());
+    //      //println("L"+cubiesIndex[c]);//);
 
-          col2 = (cubiesIndex[c]);
-          for (int i = 0; i<comp.cols.length; i++) {
-            if (comp.cols[i] ==col2.cols[i]) {
-            } else {
-              return false;
-            }
-          }
-        }
-      }
-    }
+    //      col2 = (cubiesIndex[c]);
+    //      for (int i = 0; i<comp.cols.length; i++) {
+    //        if (comp.cols[i] ==col2.cols[i]) {
+    //        } else {
+    //          return false;
+    //        }
+    //      }
+    //    }
+    //  }
+    //}
 
     return rtrn;
   }
   int getPositionHealth() {
     int rtrn = 0;
     for (Cubie c : cub) {
-      if (c.ID == c.target) {
+      if (c.ID == c.target && !c.isCenter()) {
         rtrn++;
       }
     }
@@ -299,60 +358,53 @@ class Cube {
 
   int getOrientationHealth() {
     int rtrn=0;
-    char faces[] =new char [] {'u', 'l', 'd', 'r', 'f', 'b'};
+    //char faces[] =new char [] {'D', 'U', 'R', 'F', 'L', 'B'};
+    //for (int count=0; count<faces.length; count++) {
 
-    IntList checked;
-    checked=new IntList();
+    //  Cubie[] cubiesIndex = getFace(""+faces[count]);
+    //  Cubie center;
+    //  center = cubiesIndex[getCenters(cubiesIndex)[0]];
+    //  //println(center.ID);
 
-    for (int count=0; count<faces.length; count++) {
-
-      Cubie[] cubiesIndex = getFace(faces[count]);
-      //printArray( getFace(faces[count]));
-      Cubie comp;
-
-      comp = (cubiesIndex[0]);
-      println(comp.ID);
-
-      for (int c =0; c<cubiesIndex.length; c++) {
-        Cubie col2;          
-        col2 = (cubiesIndex[c]);
-        if (checked.hasValue(col2.ID)) {
-        } else {
-          checked.append(comp.ID);
-          boolean match = true;
-          for (int i = 0; i<comp.cols.length; i++) {
-            match = match & (comp.cols[i] ==col2.cols[i]);
-          }
-          if (match) {
-            rtrn++;
-          }
-        }
-      }
-    }
+    //  for (int c =0; c<cubiesIndex.length; c++) {
+    //    if (!cubiesIndex[c].isCenter()) {
+    //      Cubie col2;          
+    //      col2 = (cubiesIndex[c]);
+    //      boolean match = true;
+    //      for (int cc=0; cc<center.cols.length; cc++) {
+    //        match = match & (center.cols[cc] ==col2.cols[cc]);
+    //      }
+    //      if (match) {
+    //        rtrn++;
+    //      }
+    //    }
+    //  }
+    //}
     return rtrn;
   }
-  void rotateCubie(char face, Cubie cubie) {
+  void rotateCubie(String command, Cubie cubie) {
     ///println((int)char(face));
+    //if (!cubie.isCenter()) {
+    println(":"+command+":");
+    if (command.length()==0) return;
     boolean dir = false;
-    if ((int)char(face) < 90) {
+    if ((int)char(command.charAt(0)) < 90) {
       dir = true;
     }
+    char check = command.charAt(0);
+    if (check=='m' || check == 'M' || check == 'S' || check == 'S' || check == 'E' || check == 'e') {
+      dir =!dir;
+    }
 
-    if (face=='u' || face=='d'||face=='U' || face=='D' || face=='E' || face == 'e') { //up and down.
+    if ( command=="u" || command=="d"||command=="U" || command=="D" || command=="E1" || command == "e1"|| command=="E2" || command == "e2") { //up and down.
       rotateYCubie(cubie, dir);
-    } else if (face=='l' || face=='r' ||face=='L' || face=='R' || face == 'M' || face == 'm') { //left and right
+    } else if ( command=="l" || command=="r" ||command=="L" || command=="R" || command == "M1" || command == "m1"|| command == "M2" || command == "m2") { //left and right
       rotateXCubie(cubie, dir);
-    } else if (face=='b' || face=='f' || face=='B' || face=='F' || face == 'S' || face == 's') { //up and down
+    } else if ( command=="b" || command=="f" || command=="B" || command=="F" || command == "S1" || command == "s1"|| command == "S2" || command == "s2") { //up and down
       rotateZCubie(cubie, dir);
     }
   }
-  void swapCubie(Cubie a, Cubie b) {
-    a.locationID= b.locationID;
-    a.ID = b.ID;
-    a.x =b.x;
-    a.y = b.y;
-    a.z = b.z;
-  }
+
   Cubie getCubieID(int id) {
     for (Cubie c : cub) {
       if (c.ID == id) {
@@ -404,167 +456,155 @@ class Cube {
     return rtrn;
   }
   int[] getCenters(Cubie[] c) {
-    int[] rtrn = new int[4];
-    int counter = 0;
+
+    IntList rtrn = new IntList();// = new int[4];
     int index = 0;
     for (Cubie cubie : c) {
       //println("CubieID:"+cubie.locationID);
       if (cubie.isCenter()) {
-        rtrn[counter]=(index);//+ cubie.offset) % 4;
-        counter +=1;
-        if (counter==4) {
-          return rtrn;
-        }
+        rtrn.append(index);//+ cubie.offset) % 4;
       }      
       index++;
     }
 
-    return rtrn;
+    return rtrn.values();
   }
-  void swapCubies(char face) {
+  void swapCubies(String command) {
     //println("swap");
-    if (face=='u' || face=='d'||face=='l' || face=='r' || face == 'f' || face == 'b') {
-      Cubie cubies[] = getFace(face);
-      int idx[] = new int[4];
-      idx = getCorners(cubies);
-      //println(idx);
-      Cubie temp1 = clone(cubies[idx[0]]);
-      swapCubie(cubies[idx[0]], cubies[idx[2]]);
-      swapCubie(cubies[idx[2]], cubies[idx[3]]);
-      swapCubie(cubies[idx[3]], cubies[idx[1]]);
-      swapCubie(cubies[idx[1]], temp1);
-      idx =  getEdges(cubies);
-      Cubie temp2 =  clone( cubies[idx[0]]);
-      swapCubie(cubies[idx[0]], cubies[idx[1]]);
-      swapCubie(cubies[idx[1]], cubies[idx[3]]);
-      swapCubie(cubies[idx[3]], cubies[idx[2]]);
-      swapCubie(cubies[idx[2]], temp2);
-    } else if (face=='U' || face=='D'||face=='L' || face=='R'|| face == 'F' || face == 'B') {
-      Cubie cubies[] = getFace(face);
-      int idx[] = new int[4];
-      idx = getCorners(cubies);
-      Cubie temp1 = clone(cubies[idx[0]]);
-      swapCubie(cubies[idx[0]], cubies[idx[1]]);
-      swapCubie(cubies[idx[1]], cubies[idx[3]]);
-      swapCubie(cubies[idx[3]], cubies[idx[2]]);
-      swapCubie(cubies[idx[2]], temp1);
-      idx =  getEdges(cubies);
-      Cubie temp2 =  clone( cubies[idx[0]]);
-      swapCubie(cubies[idx[0]], cubies[idx[2]]);
-      swapCubie(cubies[idx[2]], cubies[idx[3]]);
-      swapCubie(cubies[idx[3]], cubies[idx[1]]);
-      swapCubie(cubies[idx[1]], temp2);
-    } else if (face=='e' || face == 's' || face == 'm' ) {  
+    if (command=="U" || command=="D"||command=="L" || command=="R" || command == "F" || command == "B") {
+      Cubie cubies[] = getFace( command);
+      applyRotation(cubies);
+      applyRotation(cubies);
+      applyRotation(cubies);
+      //Cubie temp0, temp1;
+      //temp0=cloneCubie(cubies[0]);
+      //temp1=cloneCubie(cubies[1]);
+      //swapCubie(cubies[0],cubies[2]);
+      //swapCubie(cubies[1],cubies[5]);
+      //swapCubie(cubies[2],cubies[8]);
+      //swapCubie(cubies[5],cubies[7]);
+      //swapCubie(cubies[8],cubies[6]);
+      //swapCubie(cubies[7],cubies[3]);
+      //swapCubie(cubies[6],temp0);
+      //swapCubie(cubies[3],temp1);
+    } else if (command=="u" || command=="d"||command=="l" || command=="r"|| command == "f" || command == "b") {
+      Cubie cubies[] = getFace( command);    
+      applyRotation(cubies);
 
-      //println("JAMES");
-      Cubie cubies[] = getFace(face);     
-      int idx[] = new int[4];
-      idx =  getEdges(cubies);
-      //(idx);
-      Cubie temp2 =  clone( cubies[idx[0]]);
-      swapCubie(cubies[idx[0]], cubies[idx[2]]);
-      swapCubie(cubies[idx[2]], cubies[idx[3]]);
-      swapCubie(cubies[idx[3]], cubies[idx[1]]);
-      swapCubie(cubies[idx[1]], temp2);
-      //println(idx);
-      //swap centers.
-      idx =  getCenters(cubies);
-      temp2 =  clone( cubies[idx[0]]);
-      swapCubie(cubies[idx[0]], cubies[idx[1]]);
-      swapCubie(cubies[idx[1]], cubies[idx[3]]);
-      swapCubie(cubies[idx[3]], cubies[idx[2]]);
-      swapCubie(cubies[idx[2]], temp2);
-    } else if (face == 'E' || face == 'S' || face == 'M') {
+      //Cubie temp0, temp1;
+      //temp0=cloneCubie(cubies[0]);
+      //temp1=cloneCubie(cubies[3]);
+      //swapCubie(cubies[0], cubies[6]);
+      //swapCubie(cubies[3], cubies[7]);
+      //swapCubie(cubies[6], cubies[8]);
+      //swapCubie(cubies[7], cubies[5]);
+      //swapCubie(cubies[8], cubies[2]);
+      //swapCubie(cubies[5], cubies[1]);
+      //swapCubie(cubies[2], temp0);
+      //swapCubie(cubies[1], temp1);
+    } else if (command=="e1" || command == "s1" || command == "m1" ) {  
+      Cubie cubies[] = getFace(command);      
+      //Cubie temp0, temp1;
+      //temp0=cloneCubie(cubies[0]);
+      //temp1=cloneCubie(cubies[3]);
+      //swapCubie(cubies[0], cubies[5]);
+      //swapCubie(cubies[3], cubies[6]);
+      //swapCubie(cubies[5], cubies[7]);
+      //swapCubie(cubies[6], cubies[4]);
+      //swapCubie(cubies[7], cubies[2]);
+      //swapCubie(cubies[4], cubies[1]);
+      //swapCubie(cubies[2], temp0);
+      //swapCubie(cubies[1], temp1);
 
-      Cubie cubies[] = getFace(face);     
-      int idx[] = new int[4];
-      idx =  getEdges(cubies);
-      //println(idx);
-      Cubie temp2 =  clone( cubies[idx[0]]);
-      swapCubie(cubies[idx[0]], cubies[idx[1]]);
-      swapCubie(cubies[idx[1]], cubies[idx[3]]);
-      swapCubie(cubies[idx[3]], cubies[idx[2]]);
-      swapCubie(cubies[idx[2]], temp2);
-      //println(idx);
-      //swap centers.
-      idx =  getCenters(cubies);
-      temp2 =  clone( cubies[idx[0]]);
-      swapCubie(cubies[idx[0]], cubies[idx[2]]);
-      swapCubie(cubies[idx[2]], cubies[idx[3]]);
-      swapCubie(cubies[idx[3]], cubies[idx[1]]);
-      swapCubie(cubies[idx[1]], temp2);
+      applyRotation(cubies);
+      applyRotation(cubies);
+      applyRotation(cubies);
+    } else if (command == "E1" || command == "S1" || command == "M1") {
+      Cubie cubies[] = getFace(command);      
+
+      applyRotation(cubies);
+
+      //Cubie temp0, temp1;
+      //temp0=cloneCubie(cubies[0]);
+      //temp1=cloneCubie(cubies[1]);
+      //swapCubie(cubies[0], cubies[2]);
+      //swapCubie(cubies[1], cubies[4]);
+      //swapCubie(cubies[2], cubies[7]);
+      //swapCubie(cubies[4], cubies[6]);
+      //swapCubie(cubies[7], cubies[5]);
+      //swapCubie(cubies[6], cubies[3]);
+      //swapCubie(cubies[5], temp0);
+      //swapCubie(cubies[3], temp1);
+    } else if (command=="e2" || command == "s2" || command == "m2" ) {  
+      Cubie cubies[] = getFace(command);      
+      //Cubie temp0, temp1;
+      //temp0=cloneCubie(cubies[0]);
+      //temp1=cloneCubie(cubies[3]);
+      //swapCubie(cubies[0], cubies[5]);
+      //swapCubie(cubies[3], cubies[6]);
+      //swapCubie(cubies[5], cubies[7]);
+      //swapCubie(cubies[6], cubies[4]);
+      //swapCubie(cubies[7], cubies[2]);
+      //swapCubie(cubies[4], cubies[1]);
+      //swapCubie(cubies[2], temp0);
+      //swapCubie(cubies[1], temp1);
+
+      applyRotation(cubies);
+      applyRotation(cubies);
+      applyRotation(cubies);
+    } else if (command == "E2" || command == "S2" || command == "M2") {
+      Cubie cubies[] = getFace(command);      
+
+      applyRotation(cubies);
+
+      //Cubie temp0, temp1;
+      //temp0=cloneCubie(cubies[0]);
+      //temp1=cloneCubie(cubies[1]);
+      //swapCubie(cubies[0], cubies[2]);
+      //swapCubie(cubies[1], cubies[4]);
+      //swapCubie(cubies[2], cubies[7]);
+      //swapCubie(cubies[4], cubies[6]);
+      //swapCubie(cubies[7], cubies[5]);
+      //swapCubie(cubies[6], cubies[3]);
+      //swapCubie(cubies[5], temp0);
+      //swapCubie(cubies[3], temp1);
     }
   }
+  void applyRotation(Cubie[] face ) {
 
-  Cubie clone(Cubie c) {
-    Cubie rtrn=c;
-    rtrn= new Cubie(c.x, c.y, c.z, 20);
-    rtrn.locationID = c.locationID;
-    rtrn.cols = copyArray(c.cols);
-    rtrn.ID = c.ID;
-    rtrn.target = c.target;
-    return rtrn;
-  }
-  int[] copyArray(int[] arr1) {
-    int[] rtrn = new int[arr1.length];
-    for (int i = 0; i<arr1.length; i++) {
-      rtrn[i] = arr1[i];
+    int wd=floor(sqrt(face.length));
+    Cubie[] temp=new Cubie[face.length];
+    //printArray(face);
+    //printArray(rtrn);
+    for (int i=0; i<temp.length; i++) {
+      println("HERE"+i);
+      if (face[i]!=null) {
+        temp[i]=cloneCubie(face[i]);
+      } else {
+        temp[i]=null;
+      }
     }
-    return rtrn;
+    //Cubie[] temp2 =  new Cubie[wd*wd];
+
+    for (int x=0; x<wd; x++) {
+      for (int y=0; y<wd; y++) {
+        //if (r==0) {
+        int t=(wd*(wd-1));
+        println("T:"+t);
+        println("x:" + x + " y:"+y);
+        int i=(t+y)-(x*wd);
+        println("i:"+i + " " + (y*wd+x));
+        swapCubie(face[y*wd+x], temp[i]);
+      }
+    }
   }
-
-
-
   void rotateYCubie(Cubie cubie, boolean dir) {
-
     cubie.rotateYCubie(dir);
   }
   void rotateXCubie(Cubie cubie, boolean dir) {
-
     cubie.rotateXCubie(dir);
   }
   void rotateZCubie(Cubie cubie, boolean dir) {
     cubie.rotateZCubie(dir);
-  }
-
-  boolean isBitON(int num, int bit) {
-
-    if ((num>>bit)%2==0) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  int faceID(int cubeID) {
-    IntList ids = new IntList();
-    ids.append(50);
-    ids.append(290);
-    ids.append(38);
-    ids.append(176);
-    ids.append(416);
-    ids.append(164);
-    ids.append(49);
-    ids.append(289);
-    ids.append(37);
-    ids.append(82);
-    ids.append(322);
-    ids.append(70);
-    ids.append(208);
-    ids.append(196);
-    ids.append(81);
-    ids.append(321);
-    ids.append(69);
-    ids.append(26);
-    ids.append(266);
-    ids.append(14);
-    ids.append(152);
-    ids.append(392);
-    ids.append(140);
-    ids.append(25);
-    ids.append(265);
-    ids.append(13);
-
-    return ids.get(cubeID);
   }
 }
