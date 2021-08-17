@@ -171,9 +171,9 @@ class Cube {
     } else if (k=='X') {
       command = "e1";
     } else if (k=='c') {
-      command= "e2";
-    } else if (k=='C') {
       command= "E2";
+    } else if (k=='C') {
+      command= "e2";
     } else if (k=='v') {
       command="d";
     } else if (k=='V') {
