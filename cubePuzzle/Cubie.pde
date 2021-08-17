@@ -147,6 +147,92 @@ class Cubie {
     return false;
   }
 
+  void show(float angle, String command, boolean direction  ){
+    boolean rX = false;
+    boolean rY = false;
+    boolean rZ =false;
+    
+    if(command == "U" || command =="u" ||command == "D" || command =="d"){
+      rX=true;      
+      println("U");
+      println("RX=true");
+    }
+    
+    if(command == "L" || command =="l" ||command == "R" || command =="r"){
+      rY=true;
+    }
+    
+    if(command == "B" || command =="b" ||command == "F" || command =="f"){
+      rZ=true;
+    }
+    stroke(0)  ;
+    strokeWeight(1);      
+    //back
+    //blue
+    pushMatrix(); 
+    
+    //if (rotating) {
+    //  println("========================");
+    //  rotateX(offsetX);
+    //  rotateY(offsetY);
+    //  rotateZ(offsetZ);
+    //  angle+=.01;
+    //}
+    translate(x, y, z);
+    if(rZ){ 
+      if(!direction)
+        rotateX(-angle);
+      else
+        rotateX(angle);
+    }
+    if(rY){
+      rotateY(angle);
+    }
+    if(rX){
+      rotateZ(angle);  
+    }
+    //if (ID==target) {
+    //tag="O";
+    //} else {
+    //tag = "";
+    //}
+    textSize(3);
+    fill(cols[front]);
+    square(0, 0, s);
+    fill(0);
+    text(tag, 0, w-2, -1);
+    fill(cols[left]);
+    rotateY(-HALF_PI);
+    square(0, 0, s);
+    fill(0);
+    text(tag, 0, w-2, 1);
+    fill(cols[up]);
+    rotateX(-HALF_PI);
+    square(0, 0, s);
+    fill(0);
+    text(tag, 0, w-2, -1);
+    translate(s, s, s);
+    fill(cols[down]);
+    rotateZ(-PI);
+    square(0, 0, s);
+    fill(0);
+    text(tag, 0, w-2, 1);
+    fill(cols[right]);
+    rotateX(-HALF_PI);
+    square(0, 0, s);
+    fill(0);
+    text(tag, 0, w-2, -1);    
+
+    fill(cols[back]);
+    rotateY(-HALF_PI);
+    square(0, 0, s);
+    fill(0);
+    text(tag, 0, w-2, 1);
+
+
+    popMatrix();
+  }
+
   void show() {
 
     stroke(0)  ;
@@ -154,13 +240,13 @@ class Cubie {
     //back
     //blue
     pushMatrix(); 
-    if (rotating) {
-      println("========================");
-      rotateX(offsetX);
-      rotateY(offsetY);
-      rotateZ(offsetZ);
-      angle+=.01;
-    }
+    //if (rotating) {
+    //  println("========================");
+    //  rotateX(offsetX);
+    //  rotateY(offsetY);
+    //  rotateZ(offsetZ);
+    //  angle+=.01;
+    //}
     translate(x, y, z);
     //if (ID==target) {
     //tag="O";
@@ -222,10 +308,10 @@ class Cubie {
       cols[front]=cols[up];
       cols[up] =temp;
     }
-    if (hitAngle(offsetX)) {
-      //rotating = false;
-      println("TEST");
-    }
+    //if (hitAngle(offsetX)) {
+    //  //rotating = false;
+    //  println("TEST");
+    //}
   }  
   void rotateYCubie(boolean dir) {
     println("ROTATEY " + dir);
@@ -250,9 +336,9 @@ class Cubie {
       cols[right]=cols[front];
       cols[front] =temp;
     }
-    if (hitAngle(offsetX)) {
-      //rotating = false;
-    }
+    //if (hitAngle(offsetX)) {
+    //  //rotating = false;
+    //}
   }  
   void rotateZCubie(boolean dir) {
     //FSB
@@ -273,26 +359,26 @@ class Cubie {
       cols[down]=cols[right];
       cols[right] =temp;
     }
-    if (hitAngle(offsetZ)) {
-      //rotating = false;
-    }
-  }
-  boolean hitAngle(float ang) {
-    boolean rtrn = false;
-    ang = abs(ang % TWO_PI);
-    ang = (int)(ang);
-    //println(ang);
-    //if (ang ==round(10*HALF_PI)/10  ||
-    //  ang ==round(10*PI)/10  ||
-    //  ang ==round(10*(PI+HALF_PI))/10 ||
-    //  ang ==round(10*(PI+HALF_PI))/10 
-    //  ) {
-    //  rtrn = true;
+    //if (hitAngle(offsetZ)) {
+    //  //rotating = false;
     //}
-    if((int)ang==0){
-      return true;  
-    }
-
-    return rtrn;
   }
+  //boolean hitAngle(float ang) {
+  //  boolean rtrn = false;
+  //  ang = abs(ang % TWO_PI);
+  //  ang = (int)(ang);
+  //  //println(ang);
+  //  //if (ang ==round(10*HALF_PI)/10  ||
+  //  //  ang ==round(10*PI)/10  ||
+  //  //  ang ==round(10*(PI+HALF_PI))/10 ||
+  //  //  ang ==round(10*(PI+HALF_PI))/10 
+  //  //  ) {
+  //  //  rtrn = true;
+  //  //}
+  //  if((int)ang==0){
+  //    return true;  
+  //  }
+
+  //  return rtrn;
+  //}
 }

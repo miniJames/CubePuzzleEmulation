@@ -1,8 +1,8 @@
 
 Cubie cloneCubie(Cubie c) {
   Cubie rtrn;//=c;
-  println("clone cubie");
-  println(c);
+  //println("clone cubie");
+  //println(c);
   rtrn= new Cubie(c.x, c.y, c.z, 20, c.belongsTo);
   rtrn.tag = c.tag;
   rtrn.locationID = c.locationID;
@@ -14,27 +14,27 @@ Cubie cloneCubie(Cubie c) {
 }
 void swapCubie(Cubie a, Cubie b) {
   Cubie temp;
-  println("swap cubie");
+  //println("swap cubie");
   if (a!=null) {
 
     temp = cloneCubie(a);
-    println("A");
+    //println("A");
     if (b!=null) {
       a.locationID= b.locationID;
-      println("A");
+      //println("A");
       a.belongsTo = b.belongsTo;
-      println("A");       
+      //println("A");       
       a.tag = b.tag;       
-      println("A");
+      //println("A");
 
       a.ID = b.ID;       
-      println("A");
+      //println("A");
       a.x =b.x;       
-      println("A");
+      //println("A");
       a.y = b.y;       
-      println("A");
+      //println("A");
       a.z = b.z;       
-      println("A");
+      //println("A");
     } else { 
       a=null;
       b=new Cubie();

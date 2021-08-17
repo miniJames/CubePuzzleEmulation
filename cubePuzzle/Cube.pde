@@ -7,6 +7,10 @@ int back =5;// 0x1;
 int equator = 7;
 int standing = 6;
 int middle = 8;
+int notMoving = 0;
+int moving = 1;
+float angle = 0.0;
+String com="";
 //
 class Cube {
   AlgorithmManager alg;
@@ -14,6 +18,7 @@ class Cube {
   boolean scrambleMode = false;
   int l, wd, h; 
   ArrayList<Cubie> cub;
+  int cubeState = notMoving;
   Cube(int len, int wid, int hei) {
     l=len;
     wd=wid;
@@ -128,6 +133,7 @@ class Cube {
   }
 
   void changeMode(char k) {
+    cubeState=moving;
 
     String command = "";
     if (k=='q') {
@@ -171,14 +177,15 @@ class Cube {
     } else if (k=='X') {
       command = "e1";
     } else if (k=='c') {
-      command= "E2";
-    } else if (k=='C') {
       command= "e2";
+    } else if (k=='C') {
+      command= "E2";
     } else if (k=='v') {
       command="d";
     } else if (k=='V') {
       command="D";
     }
+    com=command;
     swapCubies(command);
     for (Cubie cubie : getFace(""+command)) {
 
@@ -222,15 +229,62 @@ class Cube {
     }
   }
   void show() {
-    int counter =0;
-    for (int k=0; k<l; k++) {
-      for (int j=0; j<wd; j++) {
-        for (int i=0; i<h; i++) {
+    //println("Cube state " + cubeState);
+    if (cubeState==moving) {
+      // animate until it has rotated to its resting place.
 
-          if ((k==0 || k==l-1) || ((k>0 && k<l) && (j==0)||(i==0)|| (k==0)) || ((k>0 && k<l-1) && (j==wd-1)||(i==h-1)|| (k==l-1)) ) {
-            cub.get(counter).show();
+      //get the slice
+      String face="F";
+      Cubie[]  f = getFace(com);
+      if (face=="F") {
+      } else if (face=="B") {
+      } else if (face=="L") {
+      } else if (face=="R") {
+      } else if (face=="U") {
+      } else if (face=="D") {
+      }
+
+      
+      angle+=0.01;
+      if (angle >= HALF_PI) {
+        cubeState=notMoving;
+        angle=0;
+      }
+
+      //show all other slices.
+      int counter =0;
+      for (int k=0; k<l; k++) {
+        for (int j=0; j<wd; j++) {
+          for (int i=0; i<h; i++) {
+
+            boolean found = false;
+            if ((k==0 || k==l-1) || ((k>0 && k<l) && (j==0)||(i==0)|| (k==0)) || ((k>0 && k<l-1) && (j==wd-1)||(i==h-1)|| (k==l-1)) ) {
+
+              for (Cubie c : f) {
+                if (c==cub.get(counter)) {
+                  found=true;
+                }
+              }
+              visuallyRotateThisFace(f, com);
+              if (!found)  
+                cub.get(counter).show();
+            }
+            counter++;
           }
-          counter++;
+        }
+      }
+    } else {
+      int counter =0;
+      for (int k=0; k<l; k++) {
+        for (int j=0; j<wd; j++) {
+          for (int i=0; i<h; i++) {
+
+            if ((k==0 || k==l-1) || ((k>0 && k<l) && (j==0)||(i==0)|| (k==0)) || ((k>0 && k<l-1) && (j==wd-1)||(i==h-1)|| (k==l-1)) ) {
+
+              cub.get(counter).show();
+            }
+            counter++;
+          }
         }
       }
     }
@@ -239,6 +293,7 @@ class Cube {
 
     //  cu.show();
     //}
+
     if (scrambleMode  ) {
       //for (int cc = 0; cc < 5000; cc++) {
       scramble(1);
@@ -385,7 +440,7 @@ class Cube {
   void rotateCubie(String command, Cubie cubie) {
     ///println((int)char(face));
     //if (!cubie.isCenter()) {
-    println(":"+command+":");
+    //println(":"+command+":");
     if (command.length()==0) return;
     boolean dir = false;
     if ((int)char(command.charAt(0)) < 90) {
@@ -572,12 +627,12 @@ class Cube {
   }
   void applyRotation(Cubie[] face ) {
 
-    int wd=floor(sqrt(face.length));
+    int wd=(int)(sqrt(face.length));
     Cubie[] temp=new Cubie[face.length];
     //printArray(face);
     //printArray(rtrn);
     for (int i=0; i<temp.length; i++) {
-      println("HERE"+i);
+      //println("HERE"+i);
       if (face[i]!=null) {
         temp[i]=cloneCubie(face[i]);
       } else {
@@ -590,10 +645,10 @@ class Cube {
       for (int y=0; y<wd; y++) {
         //if (r==0) {
         int t=(wd*(wd-1));
-        println("T:"+t);
-        println("x:" + x + " y:"+y);
+        //println("T:"+t);
+        //println("x:" + x + " y:"+y);
         int i=(t+y)-(x*wd);
-        println("i:"+i + " " + (y*wd+x));
+        //println("i:"+i + " " + (y*wd+x));
         swapCubie(face[y*wd+x], temp[i]);
       }
     }
@@ -606,5 +661,17 @@ class Cube {
   }
   void rotateZCubie(Cubie cubie, boolean dir) {
     cubie.rotateZCubie(dir);
+  }
+
+
+  void visuallyRotateThisFace(Cubie[] face, String command) {
+       boolean dir = false;
+    if ((int)char(command.charAt(0)) < 90) {
+      dir = true;
+    }
+    for(Cubie c : face){
+      c.show(angle,command, dir);    
+    }
+    
   }
 }
