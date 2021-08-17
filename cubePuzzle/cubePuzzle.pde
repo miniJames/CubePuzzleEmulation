@@ -7,7 +7,7 @@ PeasyCam cam;
 HillClimberSolverSmart g;
 
 void setup() {
-  c=new Cube(15,15,15);
+  c=new Cube(4,4,4);
 
   //noLoop();
   size(1000, 1000, P3D); 
